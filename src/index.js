@@ -1,9 +1,21 @@
-import $ from 'jquery';
-import './style.scss';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducers from './reducers';
+import App from './app';
 
-let num = 0;
+// this creates the store with the reducers, and does some other stuff to initialize devtools
+// boilerplate to copy, don't have to know
+const store = createStore(reducers, {}, compose(
+  applyMiddleware(),
+  window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
+));
 
-setInterval(() => {
-  num += 1;
-  $('#main').html(`You've been on this page for ${num} seconds.`);
-}, 1000);
+// we now wrap App in a Provider
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('main'),
+);
